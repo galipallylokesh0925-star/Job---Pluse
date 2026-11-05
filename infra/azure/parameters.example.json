@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "value": "ai-job-agent"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "containerImage": {
+      "value": "ghcr.io/OWNER/ai-job-agent:REPLACE_WITH_TAG"
+    },
+    "mongodbUri": {
+      "value": "mongodb+srv://USER:PASSWORD@YOUR-CLUSTER.mongodb.net/job_agent_db?retryWrites=true&w=majority&tls=true"
+    }
+  }
+}

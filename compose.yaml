@@ -1,0 +1,62 @@
+services:
+  mongo:
+    image: mongo:8.0
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/job_agent_db?serverSelectionTimeoutMS=5000
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_AUTH: ${SMTP_AUTH:-true}
+      SMTP_STARTTLS: ${SMTP_STARTTLS:-true}
+      AUTOMATION_EMAIL_ENABLED: ${AUTOMATION_EMAIL_ENABLED:-false}
+      AUTOMATION_EMAIL_FROM: ${AUTOMATION_EMAIL_FROM:-}
+      TESSERACT_COMMAND: ${TESSERACT_COMMAND:-tesseract}
+      TESSERACT_LANGUAGE: ${TESSERACT_LANGUAGE:-eng}
+      TESSERACT_DPI: ${TESSERACT_DPI:-300}
+      TESSERACT_MAXIMUM_PAGES: ${TESSERACT_MAXIMUM_PAGES:-20}
+      TESSERACT_TIMEOUT_SECONDS: ${TESSERACT_TIMEOUT_SECONDS:-60}
+      GREENHOUSE_ENABLED: ${GREENHOUSE_ENABLED:-true}
+      GREENHOUSE_BOARDS: ${GREENHOUSE_BOARDS:-}
+      LEVER_ENABLED: ${LEVER_ENABLED:-true}
+      LEVER_SITES: ${LEVER_SITES:-}
+      RSS_JOB_FEEDS_ENABLED: ${RSS_JOB_FEEDS_ENABLED:-true}
+      RSS_JOB_FEEDS: ${RSS_JOB_FEEDS:-}
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 1g
+    cpus: 2.0
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  mongo-data:

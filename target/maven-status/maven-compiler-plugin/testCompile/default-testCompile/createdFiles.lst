@@ -1,0 +1,16 @@
+com\aijobagent\service\JobMatchingServiceTest.class
+com\aijobagent\service\ResumeParserServiceTest.class
+com\aijobagent\connector\JobConnectorsTest.class
+com\aijobagent\controller\ApplicationSubmissionControllerTest.class
+com\aijobagent\connector\PublicJobFeedConnectorsTest.class
+com\aijobagent\controller\ApplicationPreparationControllerTest.class
+com\aijobagent\controller\AutomationControllerTest.class
+com\aijobagent\controller\JobDiscoveryControllerTest.class
+com\aijobagent\AiJobAgentApplicationTests.class
+com\aijobagent\service\ApplicationPreparationServiceTest.class
+com\aijobagent\controller\HealthControllerTest.class
+com\aijobagent\service\JobDiscoveryServiceTest.class
+com\aijobagent\controller\CandidateProfileControllerTest.class
+com\aijobagent\controller\JobMatchingControllerTest.class
+com\aijobagent\service\AutomationServiceTest.class
+com\aijobagent\service\ApplicationSubmissionServiceTest.class

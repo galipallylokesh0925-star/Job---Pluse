@@ -1,0 +1,29 @@
+spring:
+  data:
+    mongodb:
+      # Required for unique idempotency indexes used by confirmed applications.
+      auto-index-creation: true
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+  health:
+    mail:
+      enabled: ${AUTOMATION_EMAIL_ENABLED:false}
+
+logging:
+  level:
+    root: INFO
+    com.aijobagent: INFO

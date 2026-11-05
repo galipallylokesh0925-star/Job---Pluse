@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Job Application Agent - Autonomous job discovery and intelligent application system">
+    <title>AI Job Application Agent | Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3.3 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom Glassmorphic Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-glass sticky-top py-3">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <div class="p-2 rounded-3 me-2" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                    <i class="bi bi-robot fs-5 text-white"></i>
+                </div>
+                <div>
+                    <span class="fw-bold gradient-text fs-5">AI Job Agent</span>
+                    <span class="badge bg-indigo-subtle text-indigo border border-indigo-subtle ms-2" style="font-size: 0.72rem;">Phase 8: Azure Deployment Pending</span>
+                </div>
+            </a>
+
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-pills mx-auto" id="mainTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active d-flex align-items-center gap-2" id="overview-tab" data-bs-toggle="pill" data-bs-target="#overview" type="button" role="tab">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Overview</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link d-flex align-items-center gap-2" id="profile-tab" data-bs-toggle="pill" data-bs-target="#profile" type="button" role="tab">
+                        <i class="bi bi-person-badge-fill"></i>
+                        <span>Candidate Profile</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link d-flex align-items-center gap-2" id="jobs-tab" data-bs-toggle="pill" data-bs-target="#jobs" type="button" role="tab">
+                        <i class="bi bi-briefcase-fill"></i>
+                        <span>Job Discovery</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link d-flex align-items-center gap-2" id="matching-tab" data-bs-toggle="pill" data-bs-target="#matching" type="button" role="tab">
+                        <i class="bi bi-stars"></i>
+                        <span>AI Match & Scoring</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link d-flex align-items-center gap-2" id="application-prep-tab" data-bs-toggle="pill" data-bs-target="#application-prep" type="button" role="tab">
+                        <i class="bi bi-file-earmark-person"></i>
+                        <span>Application Prep</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link d-flex align-items-center gap-2" id="automation-tab" data-bs-toggle="pill" data-bs-target="#automation" type="button" role="tab">
+                        <i class="bi bi-clock-history"></i>
+                        <span>Automation</span>
+                    </button>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+                <!-- System Status Indicator Badge -->
+                <div id="systemStatusPill" class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2">
+                    <span id="pulseDot" class="pulse-indicator online"></span>
+                    <span id="systemStatusText" class="fw-medium">Connecting...</span>
+                </div>
+
+                <a href="/swagger-ui.html" target="_blank" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
+                    <i class="bi bi-file-earmark-code"></i>
+                    <span>Swagger UI</span>
+                </a>
+
+                <a href="/actuator/health" target="_blank" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+                    <i class="bi bi-activity"></i>
+                    <span>Actuator</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container-fluid px-4 py-4">
+
+        <!-- Automation Safety Guard Notice -->
+        <div class="safety-banner mb-4 d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-shield-lock-fill text-warning fs-3"></i>
+                <div>
+                    <strong class="text-warning">Deterministic Safety Guard Active:</strong>
+                    <span class="text-light-emphasis small ms-1">
+                        AI Qualification Matching active with deterministic hard constraint validation. Automated applications restricted to validated profiles only.
+                    </span>
+                </div>
+            </div>
+            <span class="badge bg-warning text-dark fw-semibold px-2 py-1">Guard Rails On</span>
+        </div>
+
+        <div class="tab-content" id="mainTabContent">
+
+            <!-- TAB 1: OVERVIEW & DIAGNOSTICS -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+
+                <!-- Hero Header -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-xl-8">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h2 class="fw-bold mb-1">Autonomous Job Search & Matching Control Center</h2>
+                                    <p class="text-muted mb-0">Production-oriented AI agent built on Spring Boot 3.5, Java 25, and MongoDB.</p>
+                                </div>
+                                <span class="badge bg-indigo-subtle text-indigo border border-indigo-subtle px-3 py-2">Target Market: India</span>
+                            </div>
+
+                            <div class="mt-4 pt-2 border-top border-secondary-subtle">
+                                <h6 class="text-uppercase text-muted fw-semibold small mb-2">Target Roles & Preferences Configured:</h6>
+                                <div id="heroPreferredRoles">
+                                    <span class="tag-badge"><i class="bi bi-briefcase me-1"></i> Java Developer</span>
+                                    <span class="tag-badge"><i class="bi bi-layers me-1"></i> Full Stack Developer</span>
+                                    <span class="tag-badge"><i class="bi bi-code-slash me-1"></i> Software Engineer</span>
+                                    <span class="tag-badge"><i class="bi bi-layout-text-sidebar-reverse me-1"></i> Frontend Developer</span>
+                                    <span class="tag-badge"><i class="bi bi-hdd-network me-1"></i> Backend Developer</span>
+                                    <span class="tag-badge"><i class="bi bi-cpu me-1"></i> AI/ML Intern</span>
+                                </div>
+                                <div class="d-flex flex-wrap gap-3 mt-3 text-secondary small" id="heroPreferencesSummary">
+                                    <span><i class="bi bi-geo-alt-fill text-info me-1"></i> India (All Locations)</span>
+                                    <span><i class="bi bi-building text-primary me-1"></i> On-Site / Hybrid / Remote</span>
+                                    <span><i class="bi bi-mortarboard text-warning me-1"></i> Fresher / Entry Level</span>
+                                    <span><i class="bi bi-speedometer2 text-danger me-1"></i> Max 20 Applications/Day</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Summary Metric Cards -->
+                    <div class="col-12 col-xl-4">
+                        <div class="row g-3 h-100">
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">MongoDB Status</span>
+                                    <div>
+                                        <span id="dbStatusBadge" class="badge bg-secondary-subtle text-secondary fs-6">Checking...</span>
+                                        <div class="text-dim small mt-1">job_agent_db</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Discovered Jobs</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-info" id="metricTotalJobsHero">0</h3>
+                                        <div class="text-dim small mt-1">Indexed opportunities</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">AI Match Engine</span>
+                                    <div>
+                                        <span class="badge bg-success-subtle text-success">Active</span>
+                                        <div class="text-dim small mt-1">Semantic & Heuristics</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Active Connectors</span>
+                                    <div>
+                                        <span class="badge bg-primary-subtle text-primary">3 Feeds</span>
+                                        <div class="text-dim small mt-1">RemoteOK, Arbeitnow, Portals</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8-Phase Roadmap & Diagnostics Row -->
+                <div class="row g-4">
+                    <!-- Roadmap Column -->
+                    <div class="col-12 col-lg-7">
+                        <div class="glass-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="fw-bold mb-0">Project Architecture Roadmap</h5>
+                                <span class="badge bg-primary text-white">Phases 1-7 Verified</span>
+                            </div>
+
+                            <div class="list-group list-group-flush bg-transparent">
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold">Phase 1: Project Foundation & Diagnostic Mesh</div>
+                                            <div class="text-muted small">Spring Boot 3.5, Java 25, MongoDB connection, Actuator, OpenAPI & Dashboard shell</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold">Phase 2: Candidate Profile & Resume Engine</div>
+                                            <div class="text-muted small">PDFBox (PDF) & Apache POI (DOCX) extraction, MongoDB profile management, UI dropzone</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold">Phase 3: Multi-Source Job Discovery Connectors</div>
+                                            <div class="text-muted small">RemoteOK, Arbeitnow, Enterprise Portals, SHA-256 deduplication, filtering & UI board</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold text-white">Phase 4: AI Resume Matching & Qualification Scoring</div>
+                                            <div class="text-muted small">0-100 scoring, skill gap analysis, deterministic hard criteria validation & preparation tips</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold text-white">Phase 5: AI Application Preparation</div>
+                                            <div class="text-muted small">Tailored cover letters, verifiable profile QA, truthfulness validation without fabrication</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold text-white">Phase 6: Confirmed Applications & Safe Handoff</div>
+                                            <div class="text-muted small">Per-application confirmation, daily limits, idempotency & official-API/link-out fallback</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified: link-out</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-secondary-subtle py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-active"><i class="bi bi-check-lg"></i></span>
+                                        <div>
+                                            <div class="fw-semibold text-white">Phase 7: Background Scheduling & Alerts</div>
+                                            <div class="text-muted small">Six-hour job discovery and matching, saved run alerts, optional configured email, start/pause/stop controls</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">Verified: opt-in</span>
+                                </div>
+
+                                <div class="list-group-item bg-transparent text-white border-0 py-3 d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <span class="step-number step-pending">8</span>
+                                        <div>
+                                            <div class="fw-semibold text-white">Phase 8: Azure Container Apps Deployment</div>
+                                            <div class="text-muted small">Bicep deployment template, secure MongoDB configuration, HTTPS ingress, health probes & logs</div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-warning-subtle text-warning">Awaiting Azure setup</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagnostics Console Column -->
+                    <div class="col-12 col-lg-5">
+                        <div class="glass-card p-4 h-100 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-terminal text-info fs-5"></i>
+                                    <h5 class="fw-bold mb-0">Live Diagnostic Telemetry</h5>
+                                </div>
+                                <button id="refreshHealthBtn" class="btn btn-sm btn-outline-info d-flex align-items-center gap-1">
+                                    <i class="bi bi-arrow-clockwise"></i> Ping Now
+                                </button>
+                            </div>
+
+                            <p class="text-muted small mb-2">
+                                Real-time payload returned by <code>GET /api/v1/health</code>. Last checked: <span id="lastCheckedTime" class="text-white">Just now</span>
+                            </p>
+
+                            <pre id="rawJsonBlock" class="code-block flex-grow-1 mb-3">{ "status": "PENDING" }</pre>
+
+                            <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);">
+                                <h6 class="fw-semibold small text-uppercase text-secondary mb-2">Quick Diagnostic Links:</h6>
+                                <ul class="list-unstyled mb-0 small">
+                                    <li class="mb-1">
+                                        <a href="/api/v1/health" target="_blank" class="text-decoration-none text-info">
+                                            <i class="bi bi-box-arrow-up-right me-1"></i> /api/v1/health (System Health API)
+                                        </a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="/api/v1/matches" target="_blank" class="text-decoration-none text-info">
+                                            <i class="bi bi-box-arrow-up-right me-1"></i> /api/v1/matches (AI Match REST API)
+                                        </a>
+                                    </li>
+                                    <li class="mb-1">
+                                        <a href="/api/v1/jobs" target="_blank" class="text-decoration-none text-info">
+                                            <i class="bi bi-box-arrow-up-right me-1"></i> /api/v1/jobs (Job Listings REST API)
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/swagger-ui.html" target="_blank" class="text-decoration-none text-info">
+                                            <i class="bi bi-box-arrow-up-right me-1"></i> /swagger-ui.html (OpenAPI Docs)
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: CANDIDATE PROFILE & RESUME ENGINE -->
+            <div class="tab-pane fade" id="profile" role="tabpanel">
+
+                <!-- Upload Dropzone & Metadata Stats Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1"><i class="bi bi-file-earmark-arrow-up text-primary me-2"></i>Upload Candidate Resume</h5>
+                                    <p class="text-muted small mb-0">Powered by Apache PDFBox 3.0 & Apache POI 5.3 document engines</p>
+                                </div>
+                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">PDF & DOCX supported</span>
+                            </div>
+
+                            <input type="file" id="resumeFileInput" accept=".pdf,.docx,.txt" style="display: none;">
+
+                            <div class="upload-dropzone" id="dropzoneArea">
+                                <div class="mb-3">
+                                    <i class="bi bi-cloud-arrow-up text-primary display-4"></i>
+                                </div>
+                                <h6 class="fw-bold mb-1">Drag and drop your resume file here</h6>
+                                <p class="text-muted small mb-3">Accepts PDF (.pdf), Word (.docx), or Text (.txt) up to 10MB</p>
+                                <button type="button" class="btn btn-primary btn-sm px-4 py-2" id="browseFileBtn">
+                                    <i class="bi bi-folder2-open me-1"></i> Browse From Computer
+                                </button>
+                            </div>
+
+                            <div id="uploadProgressContainer" class="mt-3 d-none">
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 100%"></div>
+                                </div>
+                                <div class="text-center text-muted small mt-2">Extracting document text and parsing candidate profile...</div>
+                            </div>
+
+                            <div id="uploadResultAlert" class="alert alert-dismissible fade show mt-3 d-none" role="alert">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i id="uploadResultIcon" class="bi fs-5"></i>
+                                    <div id="uploadResultMessage" class="small"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+                        <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold mb-0"><i class="bi bi-file-earmark-text text-info me-2"></i>Document Telemetry</h5>
+                                    <span id="docHasResumeBadge" class="badge bg-secondary-subtle text-secondary">No File Uploaded</span>
+                                </div>
+
+                                <div class="list-group list-group-flush bg-transparent small">
+                                    <div class="list-group-item bg-transparent text-white px-0 py-2 d-flex justify-content-between border-secondary-subtle">
+                                        <span class="text-muted">Filename:</span>
+                                        <span id="docFileName" class="fw-semibold text-truncate ms-2" style="max-width: 200px;">None</span>
+                                    </div>
+                                    <div class="list-group-item bg-transparent text-white px-0 py-2 d-flex justify-content-between border-secondary-subtle">
+                                        <span class="text-muted">Engine:</span>
+                                        <span id="docParserEngine" class="fw-semibold">None</span>
+                                    </div>
+                                    <div class="list-group-item bg-transparent text-white px-0 py-2 d-flex justify-content-between border-secondary-subtle">
+                                        <span class="text-muted">File Size:</span>
+                                        <span id="docFileSize" class="fw-semibold">0 KB</span>
+                                    </div>
+                                    <div class="list-group-item bg-transparent text-white px-0 py-2 d-flex justify-content-between border-secondary-subtle">
+                                        <span class="text-muted">Extracted Text Length:</span>
+                                        <span id="docCharCount" class="fw-semibold text-info">0 characters</span>
+                                    </div>
+                                    <div class="list-group-item bg-transparent text-white px-0 py-2 d-flex justify-content-between border-0">
+                                        <span class="text-muted">Last Parsed:</span>
+                                        <span id="docParsedAt" class="fw-semibold text-dim">Never</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-3 border-top border-secondary-subtle d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-info flex-grow-1" id="viewRawTextBtn">
+                                    <i class="bi bi-eye me-1"></i> View Extracted Text
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="resetProfileBtn" title="Reset Candidate Profile">
+                                    <i class="bi bi-trash"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Form & Editor Grid -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-4">
+                        <div class="glass-card p-4 h-100">
+                            <h5 class="fw-bold mb-3"><i class="bi bi-person-lines-fill text-indigo me-2"></i>Personal & Contact</h5>
+
+                            <form id="personalInfoForm">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Full Name</label>
+                                    <input type="text" class="form-control glass-input" id="profileFullName" placeholder="e.g. Jane Doe">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Email Address</label>
+                                    <input type="email" class="form-control glass-input" id="profileEmail" placeholder="e.g. jane@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Phone Number</label>
+                                    <input type="text" class="form-control glass-input" id="profilePhone" placeholder="e.g. +91 9876543210">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Location / City</label>
+                                    <input type="text" class="form-control glass-input" id="profileLocation" placeholder="e.g. Bengaluru, India">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">LinkedIn Profile URL</label>
+                                    <input type="url" class="form-control glass-input" id="profileLinkedIn" placeholder="https://linkedin.com/in/username">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">GitHub Profile URL</label>
+                                    <input type="url" class="form-control glass-input" id="profileGithub" placeholder="https://github.com/username">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Portfolio / Website</label>
+                                    <input type="url" class="form-control glass-input" id="profilePortfolio" placeholder="https://portfolio.dev">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="glass-card p-4 h-100 d-flex flex-column">
+                            <h5 class="fw-bold mb-3"><i class="bi bi-cpu text-warning me-2"></i>Skills Matrix</h5>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted small fw-medium">Verified Skills (<span id="skillCountBadge">0</span>)</label>
+                                <div id="skillsCloud" class="p-2 rounded-3 border border-secondary-subtle" style="min-height: 120px; max-height: 180px; overflow-y: auto; background: rgba(0,0,0,0.2);">
+                                    <span class="text-dim small">No skills parsed yet. Upload a resume or add skills below.</span>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control glass-input" id="newSkillInput" placeholder="Add custom skill...">
+                                <button class="btn btn-outline-primary" type="button" id="addSkillBtn"><i class="bi bi-plus-lg"></i> Add</button>
+                            </div>
+
+                            <div class="mb-2">
+                                <span class="text-muted small">Quick Add:</span>
+                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="Java">Java</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="Spring Boot">Spring Boot</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="MongoDB">MongoDB</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="Docker">Docker</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="React">React</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="AWS">AWS</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="Kafka">Kafka</button>
+                                    <button class="btn btn-xs btn-outline-secondary py-0 px-2 quick-skill-btn" data-skill="Microservices">Microservices</button>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 flex-grow-1">
+                                <label class="form-label text-muted small fw-medium">Professional Summary</label>
+                                <textarea class="form-control glass-input" id="profileSummary" rows="4" placeholder="Brief summary of professional experience, career objective, and core strengths..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-4">
+                        <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="fw-bold mb-3"><i class="bi bi-sliders text-emerald me-2"></i>Job Search Preferences</h5>
+
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Target Roles (Comma-separated)</label>
+                                    <input type="text" class="form-control glass-input" id="prefTargetRoles" placeholder="e.g. Java Developer, Software Engineer">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Preferred Work Modes</label>
+                                    <div class="d-flex gap-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="workModeRemote" value="REMOTE">
+                                            <label class="form-check-label small" for="workModeRemote">Remote</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="workModeHybrid" value="HYBRID">
+                                            <label class="form-check-label small" for="workModeHybrid">Hybrid</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="workModeOnSite" value="ON_SITE">
+                                            <label class="form-check-label small" for="workModeOnSite">On-Site</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small fw-medium">Target Cities (Comma-separated)</label>
+                                    <input type="text" class="form-control glass-input" id="prefLocations" placeholder="e.g. Bengaluru, Pune, Remote">
+                                </div>
+
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small fw-medium">Daily Application Cap</label>
+                                        <input type="number" class="form-control glass-input" id="prefMaxDaily" min="1" max="50" value="20">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label text-muted small fw-medium">Min Salary (INR/yr)</label>
+                                        <input type="number" class="form-control glass-input" id="prefMinSalary" placeholder="e.g. 600000">
+                                    </div>
+                                </div>
+
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="prefImmediateJoiner" checked>
+                                    <label class="form-check-label small" for="prefImmediateJoiner">Immediate Joiner / 0-Day Notice</label>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2" id="saveProfileBtn">
+                                <i class="bi bi-floppy2-fill"></i> Save Profile & Preferences
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 3: JOB DISCOVERY & LISTINGS -->
+            <div class="tab-pane fade" id="jobs" role="tabpanel">
+
+                <!-- Scanner Control & Metrics Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1"><i class="bi bi-radar text-info me-2"></i>Multi-Source Job Discovery Scanner</h5>
+                                    <p class="text-muted small mb-0">Scans live feeds across RemoteOK, Arbeitnow, and Enterprise Portals with SHA-256 deduplication</p>
+                                </div>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Auto-Dedup Enabled</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-3 mb-3 p-3 rounded-3" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);">
+                                <span class="text-muted small fw-medium align-self-center">Active Connectors:</span>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="connectorRemoteOk" value="REMOTE_OK" checked>
+                                    <label class="form-check-label small" for="connectorRemoteOk">RemoteOK (Remote Tech)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="connectorArbeitnow" value="ARBEITNOW" checked>
+                                    <label class="form-check-label small" for="connectorArbeitnow">Arbeitnow (Tech Board)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="connectorEnterprise" value="ENTERPRISE_PORTAL" checked>
+                                    <label class="form-check-label small" for="connectorEnterprise">Enterprise Portals (India Roles)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="connectorGreenhouse" value="GREENHOUSE" checked>
+                                    <label class="form-check-label small" for="connectorGreenhouse">Greenhouse (configured boards)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="connectorLever" value="LEVER" checked>
+                                    <label class="form-check-label small" for="connectorLever">Lever (configured sites)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="connectorRss" value="RSS_FEED" checked>
+                                    <label class="form-check-label small" for="connectorRss">Configured RSS/Atom feeds</label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 p-3 rounded-3" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color);">
+                                <label class="form-label small fw-semibold" for="portalLinksInput">Scan your public career portal links</label>
+                                <textarea class="form-control glass-input mb-2" id="portalLinksInput" rows="3" maxlength="40960"
+                                    placeholder="https://boards.greenhouse.io/company&#10;https://jobs.lever.co/company"></textarea>
+                                <div class="text-muted small mb-3">
+                                    One HTTPS Greenhouse or Lever board/job link per line (up to 20). Supported links are saved for recurring six-hour scans when background automation is started; a job-specific link is expanded to its board for future scans. Workday, LinkedIn, and Indeed links can be imported individually from public job alerts. No portal logins or applications are submitted.
+                                </div>
+                                <button type="button" class="btn btn-outline-info btn-sm" id="scanPortalLinksBtn">
+                                    <i class="bi bi-link-45deg me-1"></i> Save, Scan & Rank Jobs
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm ms-2" id="clearSavedPortalLinksBtn">
+                                    Clear saved links
+                                </button>
+                                <div id="portalLinksResult" class="small text-light-emphasis mt-2" role="status" aria-live="polite"></div>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="button" class="btn btn-primary px-4 py-2 d-flex align-items-center gap-2" id="scanJobsBtn">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                    <span>Scan & Discover Jobs</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearJobsDbBtn" title="Clear Indexed Jobs">
+                                    <i class="bi bi-trash me-1"></i> Clear Jobs
+                                </button>
+                            </div>
+
+                            <div id="discoveryProgressContainer" class="mt-3 d-none">
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 100%"></div>
+                                </div>
+                                <div class="text-center text-muted small mt-2">Connecting to job feeds and computing cryptographic SHA-256 deduplication hashes...</div>
+                            </div>
+
+                            <div id="discoveryResultAlert" class="alert alert-dismissible fade show mt-3 d-none" role="alert">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i id="discoveryResultIcon" class="bi fs-5"></i>
+                                    <div id="discoveryResultMessage" class="small"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+                        <div class="row g-3 h-100">
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Total Discovered</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-white" id="statsTotalJobs">0</h3>
+                                        <div class="text-dim small mt-1">Stored in MongoDB</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Remote Roles</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-emerald" id="statsRemoteJobs">0</h3>
+                                        <div class="text-dim small mt-1">Worldwide / Remote</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Hybrid Roles</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-info" id="statsHybridJobs">0</h3>
+                                        <div class="text-dim small mt-1">India / Flexible</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">On-Site Roles</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-warning" id="statsOnSiteJobs">0</h3>
+                                        <div class="text-dim small mt-1">Campus / Corporate</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-4 mb-4">
+                    <h5 class="fw-bold mb-1"><i class="bi bi-inbox text-info me-2"></i>Import a job alert</h5>
+                    <p class="text-muted small mb-3">Paste details from WhatsApp, email, LinkedIn, Indeed, or a careers page. Imported jobs are deduplicated and can be ranked against your profile. This does not submit applications.</p>
+                    <form id="jobAlertImportForm" class="row g-3">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label small" for="jobAlertSource">Alert source</label>
+                            <select class="form-select glass-input" id="jobAlertSource" required>
+                                <option value="WHATSAPP_ALERT">WhatsApp</option>
+                                <option value="EMAIL_ALERT">Email</option>
+                                <option value="LINKEDIN_ALERT">LinkedIn</option>
+                                <option value="INDEED_ALERT">Indeed</option>
+                                <option value="CAREERS_ALERT">Company career / ATS page</option>
+                                <option value="OTHER_ALERT">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label small" for="jobAlertTitle">Job title</label>
+                            <input class="form-control glass-input" id="jobAlertTitle" maxlength="200" required>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label small" for="jobAlertCompany">Company</label>
+                            <input class="form-control glass-input" id="jobAlertCompany" maxlength="200" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label small" for="jobAlertApplyUrl">Official application or job link</label>
+                            <input class="form-control glass-input" id="jobAlertApplyUrl" type="url" maxlength="2048" placeholder="https://..." required>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label small" for="jobAlertLocation">Location</label>
+                            <input class="form-control glass-input" id="jobAlertLocation" maxlength="250">
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label class="form-label small" for="jobAlertWorkMode">Work mode</label>
+                            <select class="form-select glass-input" id="jobAlertWorkMode">
+                                <option value="UNKNOWN">Not specified</option>
+                                <option value="REMOTE">Remote</option>
+                                <option value="HYBRID">Hybrid</option>
+                                <option value="ON_SITE">On-site</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small" for="jobAlertDescription">Paste alert or job description (optional)</label>
+                            <textarea class="form-control glass-input" id="jobAlertDescription" rows="3" maxlength="15000" placeholder="Paste the message or job description here to help with skills matching."></textarea>
+                        </div>
+                        <div class="col-12 d-flex align-items-center gap-3">
+                            <button type="submit" class="btn btn-primary px-4" id="importJobAlertBtn"><i class="bi bi-plus-circle me-1"></i> Import & Rank Job</button>
+                            <div id="jobAlertImportResult" class="small text-light-emphasis" role="status" aria-live="polite"></div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Filter Toolbar -->
+                <div class="glass-card p-3 mb-4">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-12 col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-secondary-subtle text-muted"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control glass-input border-start-0" id="jobSearchInput" placeholder="Search by title, company, or skills (e.g. Java, Spring Boot, React)...">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <select class="form-select glass-input" id="filterWorkModeSelect">
+                                <option value="ALL">All Work Modes</option>
+                                <option value="REMOTE">Remote Only</option>
+                                <option value="HYBRID">Hybrid</option>
+                                <option value="ON_SITE">On-Site</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <select class="form-select glass-input" id="filterSourceSelect">
+                                <option value="ALL">All Sources</option>
+                                <option value="ENTERPRISE_PORTAL">Enterprise Portals</option>
+                                <option value="REMOTE_OK">RemoteOK</option>
+                                <option value="ARBEITNOW">Arbeitnow</option>
+                                <option value="GREENHOUSE">Greenhouse</option>
+                                <option value="LEVER">Lever</option>
+                                <option value="RSS_FEED">RSS/Atom</option>
+                                <option value="WHATSAPP_ALERT">WhatsApp Alerts</option>
+                                <option value="EMAIL_ALERT">Email Alerts</option>
+                                <option value="LINKEDIN_ALERT">LinkedIn Alerts</option>
+                                <option value="INDEED_ALERT">Indeed Alerts</option>
+                                <option value="CAREERS_ALERT">Careers Page Alerts</option>
+                                <option value="OTHER_ALERT">Other Alerts</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-1 text-end">
+                            <button class="btn btn-outline-secondary w-100" id="resetFiltersBtn" title="Reset Filters">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Listings Grid / Container -->
+                <div id="jobListingsContainer" class="row g-3">
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-briefcase text-secondary display-4"></i>
+                        <h5 class="fw-semibold mt-3 text-muted">No Job Postings Discovered Yet</h5>
+                        <p class="text-dim small">Click <strong>"Scan & Discover Jobs"</strong> above to query live feeds and corporate portals.</p>
+                    </div>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div id="jobsPagination" class="d-flex justify-content-between align-items-center mt-4 d-none">
+                    <span class="text-muted small" id="paginationInfo">Showing 0-0 of 0 jobs</span>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-secondary" id="prevPageBtn" disabled><i class="bi bi-chevron-left me-1"></i> Previous</button>
+                        <button class="btn btn-sm btn-outline-secondary" id="nextPageBtn" disabled>Next <i class="bi bi-chevron-right ms-1"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 4: AI RESUME MATCHING & SCORING -->
+            <div class="tab-pane fade" id="matching" role="tabpanel">
+
+                <!-- Control Bar & Telemetry Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-1"><i class="bi bi-stars text-warning me-2"></i>AI Resume Match & Gap Scoring Engine</h5>
+                                    <p class="text-muted small mb-0">Multi-factor analysis: 50% Skills, 25% Experience, 15% Education, 10% Preferences with deterministic hard gates</p>
+                                </div>
+                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Deterministic + AI</span>
+                            </div>
+
+                            <p class="text-light-emphasis small mb-3">
+                                Evaluates all discovered job opportunities against the candidate's active profile and parsed resume. Highlights matching skills in green, critical missing skills in amber, and identifies bonus strengths.
+                            </p>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <button type="button" class="btn btn-primary px-4 py-2 d-flex align-items-center gap-2" id="runBatchMatchBtn">
+                                    <i class="bi bi-lightning-charge-fill"></i>
+                                    <span>Run AI Match on All Jobs</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearMatchesBtn" title="Clear Match Results">
+                                    <i class="bi bi-trash me-1"></i> Clear Matches
+                                </button>
+                            </div>
+
+                            <div id="matchingProgressContainer" class="mt-3 d-none">
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 100%"></div>
+                                </div>
+                                <div class="text-center text-muted small mt-2">Computing multi-factor qualification vectors, skill gaps, and criteria checks...</div>
+                            </div>
+
+                            <div id="matchingResultAlert" class="alert alert-dismissible fade show mt-3 d-none" role="alert">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i id="matchingResultIcon" class="bi fs-5"></i>
+                                    <div id="matchingResultMessage" class="small"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Matching Telemetry Metric Cards -->
+                    <div class="col-12 col-lg-5">
+                        <div class="row g-3 h-100">
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Evaluated Opportunities</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-white" id="matchStatsTotal">0</h3>
+                                        <div class="text-dim small mt-1">Match evaluations</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Strong Matches (>=75%)</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-emerald" id="matchStatsStrong">0</h3>
+                                        <div class="text-dim small mt-1">High fit for applying</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Moderate Matches (50-74%)</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-info" id="matchStatsModerate">0</h3>
+                                        <div class="text-dim small mt-1">Partial skill fit</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="glass-card p-3 h-100 d-flex flex-column justify-content-between">
+                                    <span class="text-muted small">Hard Criteria Pass Rate</span>
+                                    <div>
+                                        <h3 class="fw-bold mb-0 text-warning" id="matchStatsPassed">0%</h3>
+                                        <div class="text-dim small mt-1">Zero constraint violations</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Filters Toolbar -->
+                <div class="glass-card p-3 mb-4">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-12 col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-secondary-subtle text-muted"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control glass-input border-start-0" id="matchSearchInput" placeholder="Filter by matched job title, company, or skills...">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <select class="form-select glass-input" id="filterMatchTierSelect">
+                                <option value="ALL">All Qualification Tiers</option>
+                                <option value="STRONG_MATCH">Strong Matches (>= 75%)</option>
+                                <option value="MODERATE_MATCH">Moderate Matches (50-74%)</option>
+                                <option value="WEAK_MATCH">Weak Matches (&lt; 50%)</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3 d-flex align-items-center">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="filterHardCriteriaOnly">
+                                <label class="form-check-label small text-muted" for="filterHardCriteriaOnly">Hard Criteria Passed Only</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-1 text-end">
+                            <button class="btn btn-outline-secondary w-100" id="resetMatchFiltersBtn" title="Reset Filters">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Listings Cards Grid -->
+                <div id="matchListingsContainer" class="row g-3">
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-stars text-secondary display-4"></i>
+                        <h5 class="fw-semibold mt-3 text-muted">No AI Match Evaluations Generated Yet</h5>
+                        <p class="text-dim small">Ensure jobs are discovered, then click <strong>"Run AI Match on All Jobs"</strong> above.</p>
+                    </div>
+                </div>
+
+                <!-- Match Pagination Footer -->
+                <div id="matchPagination" class="d-flex justify-content-between align-items-center mt-4 d-none">
+                    <span class="text-muted small" id="matchPaginationInfo">Showing 0-0 of 0 evaluated jobs</span>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-secondary" id="matchPrevPageBtn" disabled><i class="bi bi-chevron-left me-1"></i> Previous</button>
+                        <button class="btn btn-sm btn-outline-secondary" id="matchNextPageBtn" disabled>Next <i class="bi bi-chevron-right ms-1"></i></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 5: APPLICATION PREPARATION -->
+            <div class="tab-pane fade" id="application-prep" role="tabpanel">
+                <div class="alert alert-info border-info-subtle" role="note">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    Letters use a deterministic template grounded in your saved profile and the selected job. No external AI model is configured. Review all profile facts and the final text before applying.
+                </div>
+                <div class="alert alert-warning border-warning-subtle" role="note">
+                    <i class="bi bi-shield-check me-2"></i>
+                    Every application requires a separate confirmation. Only documented official employer/ATS APIs are eligible for submission; no provider API is currently configured, so confirmed applications will be handed off through the employer link and will not be marked as submitted.
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="glass-card p-4 h-100">
+                            <h5 class="fw-bold mb-1"><i class="bi bi-envelope-paper text-info me-2"></i>Tailored Cover Letter</h5>
+                            <p class="text-muted small mb-3">Choose an evaluated job to build an evidence-grounded draft. Review and confirm each application. If an employer has no configured official submission API, this app opens its application page for you to finish; it does not fill or submit arbitrary portal forms.</p>
+                            <label for="prepJobSelect" class="form-label small text-muted">Evaluated job</label>
+                            <div class="input-group mb-3">
+                                <select id="prepJobSelect" class="form-select glass-input">
+                                    <option value="">Loading evaluated jobs...</option>
+                                </select>
+                                <button type="button" class="btn btn-primary" id="prepareApplicationBtn">
+                                    <i class="bi bi-magic me-1"></i> Prepare
+                                </button>
+                            </div>
+                            <div id="prepFeedback" class="small text-muted" role="status" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="fw-bold mb-1"><i class="bi bi-clipboard2-check text-warning me-2"></i>Profile QA</h5>
+                                    <p class="text-muted small mb-3">Checks completeness and whether populated fields appear in the uploaded resume text.</p>
+                                </div>
+                                <span id="profileReviewScore" class="badge bg-secondary-subtle text-secondary">Loading</span>
+                            </div>
+                            <div id="profileReviewSummary" class="small mb-2" aria-live="polite">Checking profile...</div>
+                            <ul id="profileReviewItems" class="small text-muted mb-0 ps-3"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="prepOutputSection" class="glass-card p-4 d-none">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1" id="prepJobHeading">Application draft</h5>
+                            <span class="text-muted small" id="prepGenerationMethod"></span>
+                        </div>
+                        <a id="prepApplyLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary">
+                            Open employer application <i class="bi bi-box-arrow-up-right ms-1"></i>
+                        </a>
+                    </div>
+
+                    <label for="prepCoverLetter" class="form-label small text-muted">Editable cover letter</label>
+                    <textarea id="prepCoverLetter" class="form-control glass-input mb-3" rows="14" maxlength="15000" aria-describedby="prepHumanReviewNote"></textarea>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <button type="button" class="btn btn-sm btn-warning" id="validateCoverLetterBtn">
+                            <i class="bi bi-shield-check me-1"></i> Check claims
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="copyCoverLetterBtn">
+                            <i class="bi bi-clipboard me-1"></i> Copy draft
+                        </button>
+                    </div>
+                    <div class="border border-secondary-subtle rounded-3 p-3 mb-4">
+                        <p class="text-muted small">Complete any unanswered employer questions yourself. The app will not guess required answers, log in to job portals, or bypass verification challenges.</p>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="submissionConsent">
+                            <label class="form-check-label small" for="submissionConsent">
+                                I reviewed this job and cover letter, and authorize submission through an official provider if available, or a handoff to the employer application page.
+                            </label>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-success" id="submitApplicationBtn" disabled>
+                            <i class="bi bi-send-check me-1"></i> Confirm this application
+                        </button>
+                        <div id="submissionFeedback" class="small mt-2" role="status" aria-live="polite"></div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12 col-lg-6">
+                            <h6 class="text-uppercase text-muted small fw-semibold">Source evidence</h6>
+                            <ul id="prepEvidenceList" class="small text-light-emphasis ps-3 mb-0"></ul>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <h6 class="text-uppercase text-muted small fw-semibold">Truthfulness check</h6>
+                            <div id="truthfulnessSummary" class="small" aria-live="polite">Generate or check a letter to review its claims.</div>
+                            <ul id="truthfulnessIssues" class="small text-warning ps-3 mt-2 mb-0"></ul>
+                            <p id="prepHumanReviewNote" class="text-muted small mt-2 mb-0">Automated checks can flag likely unsupported claims, but cannot prove truth. Always verify the draft yourself.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: BACKGROUND AUTOMATION -->
+            <div class="tab-pane fade" id="automation" role="tabpanel">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1"><i class="bi bi-clock-history text-info me-2"></i>Background Automation</h2>
+                        <p class="text-muted mb-0">Start opt-in discovery and matching every six hours. Applications are never submitted by scheduled runs.</p>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-info" id="refreshAutomationBtn">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="alert alert-warning border-warning-subtle" role="note">
+                    <i class="bi bi-shield-lock me-2"></i>
+                    Starting automation polls enabled job sources and evaluates matches. New-job alerts appear here when a scan finds postings. Email is sent only when SMTP settings and email notifications are enabled.
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-xl-5">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h5 class="fw-bold mb-0">Schedule controls</h5>
+                                <span id="automationStatusBadge" class="badge bg-secondary-subtle text-secondary">Loading</span>
+                            </div>
+                            <p class="small text-muted mb-3">Schedule: <strong id="automationInterval">6 hours</strong>. The first scan begins shortly after starting.</p>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <button type="button" class="btn btn-sm btn-success" id="startAutomationBtn">
+                                    <i class="bi bi-play-fill me-1"></i> Start
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning" id="pauseAutomationBtn">
+                                    <i class="bi bi-pause-fill me-1"></i> Pause
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="stopAutomationBtn">
+                                    <i class="bi bi-stop-fill me-1"></i> Stop
+                                </button>
+                            </div>
+                            <div id="automationStatusMessage" class="small text-muted" role="status" aria-live="polite">Loading automation status...</div>
+                            <div class="small text-muted mt-3">
+                                Last run: <span id="automationLastRun">Not yet run</span><br>
+                                Next run: <span id="automationNextRun">Not scheduled</span><br>
+                                Email alerts: <span id="automationEmailStatus">Not configured</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-7">
+                        <div class="glass-card p-4 h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h5 class="fw-bold mb-0">Recent run alerts</h5>
+                                <span class="text-muted small">Latest 20 runs</span>
+                            </div>
+                            <div id="automationRuns" class="small" aria-live="polite">
+                                <div class="text-muted">Loading run history...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Raw Resume Text Inspector Modal -->
+        <div class="modal fade" id="rawTextModal" tabindex="-1" aria-labelledby="rawTextModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content glass-card border-secondary-subtle">
+                    <div class="modal-header border-secondary-subtle">
+                        <h5 class="modal-title fw-bold" id="rawTextModalLabel"><i class="bi bi-file-text me-2"></i>Raw Parsed Document Text</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small">This is the exact plain text stream extracted by the document parser (PDFBox/POI) and utilized for AI candidate matching prompts.</p>
+                        <pre id="rawResumeTextContent" class="code-block" style="max-height: 400px; white-space: pre-wrap; word-break: break-word;">Loading raw text...</pre>
+                    </div>
+                    <div class="modal-footer border-secondary-subtle">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Job Detail Modal -->
+        <div class="modal fade" id="jobDetailModal" tabindex="-1" aria-labelledby="jobDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content glass-card border-secondary-subtle">
+                    <div class="modal-header border-secondary-subtle">
+                        <div>
+                            <h5 class="modal-title fw-bold" id="modalJobTitle">Job Title</h5>
+                            <span class="text-muted small" id="modalJobCompany">Company</span>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-wrap gap-2 mb-3" id="modalJobBadges"></div>
+
+                        <div class="mb-3">
+                            <h6 class="fw-semibold small text-uppercase text-secondary">Required Skills & Keywords:</h6>
+                            <div id="modalJobSkills" class="d-flex flex-wrap gap-1"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6 class="fw-semibold small text-uppercase text-secondary">Job Description:</h6>
+                            <div id="modalJobDescription" class="p-3 rounded-3" style="background: rgba(0,0,0,0.2); line-height: 1.6; font-size: 0.9rem; max-height: 300px; overflow-y: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary-subtle d-flex justify-content-between">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="#" target="_blank" class="btn btn-sm btn-primary d-flex align-items-center gap-1" id="modalJobApplyBtn">
+                            <span>Apply on Employer Portal</span>
+                            <i class="bi bi-box-arrow-up-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

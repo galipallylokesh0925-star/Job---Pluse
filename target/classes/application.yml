@@ -1,0 +1,123 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: ai-job-application-agent
+
+  data:
+    mongodb:
+      # Connects to local MongoDB server by default or reads from MONGODB_URI environment variable
+      uri: ${MONGODB_URI:mongodb://localhost:27017/job_agent_db}
+      auto-index-creation: true
+
+  mail:
+    host: ${SMTP_HOST:}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:true}
+          starttls:
+            enable: ${SMTP_STARTTLS:true}
+
+  # Multipart upload limit for resumes (PDF/DOCX)
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# Springdoc OpenAPI / Swagger Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+
+# Actuator Monitoring Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+# Application Specific Configurations & Preferences
+app:
+  version: "1.0.0"
+  defaults:
+    country: "India"
+    work-modes: ["ON_SITE", "HYBRID", "REMOTE"]
+  resume:
+    ocr:
+      tesseract-command: ${TESSERACT_COMMAND:tesseract}
+      language: ${TESSERACT_LANGUAGE:eng}
+      dpi: ${TESSERACT_DPI:300}
+      maximum-pages: ${TESSERACT_MAXIMUM_PAGES:20}
+      timeout-seconds: ${TESSERACT_TIMEOUT_SECONDS:60}
+    experience-level: "ENTRY_LEVEL_FRESHER"
+    employment-types: ["INTERNSHIP", "FULL_TIME"]
+    max-daily-applications: 20
+    preferred-roles:
+      - "Java Developer"
+      - "Full Stack Developer"
+      - "Software Engineer"
+      - "Frontend Developer"
+      - "Backend Developer"
+      - "AI/ML Intern"
+  discovery:
+    connectors:
+      remote-ok:
+        enabled: true
+        api-url: "https://remoteok.com/api"
+      arbeitnow:
+        enabled: true
+        api-url: "https://www.arbeitnow.com/api/job-board-api"
+      enterprise-portal:
+        enabled: true
+      greenhouse:
+        enabled: ${GREENHOUSE_ENABLED:true}
+        boards: ${GREENHOUSE_BOARDS:}
+      lever:
+        enabled: ${LEVER_ENABLED:true}
+        sites: ${LEVER_SITES:}
+      rss:
+        enabled: ${RSS_JOB_FEEDS_ENABLED:true}
+        feeds: ${RSS_JOB_FEEDS:}
+    connect-timeout-ms: 5000
+    read-timeout-ms: 10000
+  matching:
+    weights:
+      skills: 0.50
+      experience: 0.25
+      education: 0.15
+      preferences: 0.10
+    thresholds:
+      strong-match: 75
+      moderate-match: 50
+    default-min-score: 50
+  automation:
+    interval-ms: ${AUTOMATION_INTERVAL_MS:21600000}
+    check-interval-ms: ${AUTOMATION_CHECK_INTERVAL_MS:60000}
+    email:
+      enabled: ${AUTOMATION_EMAIL_ENABLED:false}
+      from: ${AUTOMATION_EMAIL_FROM:}
+
+# Logging Configuration
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    root: INFO
+    com.aijobagent: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: INFO

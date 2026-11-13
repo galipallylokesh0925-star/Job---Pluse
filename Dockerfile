@@ -1,10 +1,11 @@
- 
+
 FROM maven:3.10.0-eclipse-temurin-25-alpine AS build
 
 WORKDIR /workspace
 COPY . .
 
-RUN chmod +x mvnw && ./mvnw -B clean package -DskipTests \    && mkdir -p /app \
+RUN chmod +x mvnw && ./mvnw -B clean package -DskipTests \
+    && mkdir -p /app \
     && cp target/*.jar /app/app.jar
 
 FROM eclipse-temurin:25-jre-jammy AS runtime

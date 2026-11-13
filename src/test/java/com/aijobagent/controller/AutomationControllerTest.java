@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AutomationController.class)
+@SuppressWarnings("null")
 class AutomationControllerTest {
 
     @Autowired
@@ -79,7 +80,7 @@ class AutomationControllerTest {
                         java.util.List.of("https://boards.greenhouse.io/example"), java.util.List.of()));
 
         mockMvc.perform(put("/api/v1/automation/portal-links")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.parseMediaType(MediaType.APPLICATION_JSON_VALUE))
                         .content("""
                                 {"portalUrls":["https://boards.greenhouse.io/example"]}
                                 """))

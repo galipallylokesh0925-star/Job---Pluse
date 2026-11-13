@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(JobDiscoveryController.class)
+@SuppressWarnings("null")
 class JobDiscoveryControllerTest {
 
     @Autowired
@@ -106,7 +107,7 @@ class JobDiscoveryControllerTest {
                         "Public postings scanned.", 1, 1, 0))));
 
         mockMvc.perform(post("/api/v1/jobs/portal-links/discover")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.parseMediaType(MediaType.APPLICATION_JSON_VALUE))
                         .content("""
                                 {"portalUrls":["https://boards.greenhouse.io/example"]}
                                 """)
@@ -124,7 +125,7 @@ class JobDiscoveryControllerTest {
                 .mapToObj(index -> "\"https://boards.greenhouse.io/company" + index + "\"")
                 .collect(java.util.stream.Collectors.joining(","));
         mockMvc.perform(post("/api/v1/jobs/portal-links/discover")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.parseMediaType(MediaType.APPLICATION_JSON_VALUE))
                         .content("{\"portalUrls\":[" + urls + "]}"))
                 .andExpect(status().isBadRequest());
     }

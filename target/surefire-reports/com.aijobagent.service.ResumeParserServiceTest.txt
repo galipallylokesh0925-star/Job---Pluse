@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.aijobagent.service.ResumeParserServiceTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 2.096 s -- in com.aijobagent.service.ResumeParserServiceTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 1.206 s -- in com.aijobagent.service.ResumeParserServiceTest

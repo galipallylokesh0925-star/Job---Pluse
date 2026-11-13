@@ -69,3 +69,4 @@ The Bicep template in `infra/azure` provisions an Azure Container Apps environme
    ```
 
 The deployment returns the HTTPS application URL as `appUrl`. The template keeps one replica because scheduled automation currently uses an in-process lock; do not scale it out until the scheduler uses a distributed lock. The app expects the database to be reachable from the Container Apps environment. Optional email delivery remains disabled; configure SMTP credentials as Container Apps secrets before enabling it. This template has not been applied to a live Azure subscription.
+
